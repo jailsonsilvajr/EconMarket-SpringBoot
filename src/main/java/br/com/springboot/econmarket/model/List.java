@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 
@@ -32,6 +33,15 @@ public class List implements Serializable{
 	@JsonBackReference
 	private java.util.List<User> users;
 	
+	@OneToMany(orphanRemoval = true)
+	@JoinTable(
+			name = "ListsItems",
+			uniqueConstraints = @UniqueConstraint(columnNames = {"id_list", "id_item"}),
+			joinColumns = @JoinColumn(name = "id_list"),
+			inverseJoinColumns = @JoinColumn(name = "id_item")
+			)
+	private java.util.List<Item> items;
+	
 	public long getId() {
 		return id;
 	}
@@ -49,5 +59,11 @@ public class List implements Serializable{
 	}
 	public void setUsers(java.util.List<User> users) {
 		this.users = users;
+	}
+	public java.util.List<Item> getItems() {
+		return items;
+	}
+	public void setItems(java.util.List<Item> items) {
+		this.items = items;
 	}
 }
